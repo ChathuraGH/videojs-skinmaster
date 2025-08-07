@@ -1,0 +1,54 @@
+/* Netflix Dark Skin */
+.video-js.vjs-netflix-dark {
+  font-family: "Netflix Sans", "Helvetica Neue", Arial, sans-serif;
+  color: #fff;
+  background-color: #141414;
+}
+
+.vjs-netflix-dark .vjs-control-bar {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.9) 100%);
+  height: 4em;
+}
+
+.vjs-netflix-dark .vjs-play-progress {
+  background: #e50914;
+}
+
+.vjs-netflix-dark .vjs-volume-level {
+  background: #e50914;
+}
+
+.vjs-netflix-dark .vjs-big-play-button {
+  background: rgba(0,0,0,0.8);
+  border: 2px solid #e50914;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+}
+
+.vjs-netflix-dark .vjs-poster {
+  background-size: cover;
+  background-position: center;
+}
+
+.vjs-netflix-dark .vjs-loading-spinner {
+  border-color: #e50914 transparent transparent transparent;
+}
+
+.vjs-netflix-dark .vjs-button:hover {
+  color: #e50914;
+}
+
+.vjs-netflix-dark .vjs-menu-button-popup .vjs-menu {
+  background: rgba(20,20,20,0.95);
+  border: 1px solid #e50914;
+}
+
+.vjs-netflix-dark .vjs-menu li {
+  background: transparent;
+  border-bottom: 1px solid #333;
+}
+
+.vjs-netflix-dark .vjs-menu li:hover {
+  background: rgba(229,9,20,0.2);
+}

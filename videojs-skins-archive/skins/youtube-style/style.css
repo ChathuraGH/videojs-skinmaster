@@ -1,0 +1,54 @@
+/* VideoJS YouTube Style Skin */
+.video-js.vjs-yt-style {
+  font-family: "YouTube Sans", "Roboto", sans-serif;
+  color: #fff;
+  background-color: #000;
+}
+
+.vjs-yt-style .vjs-control-bar {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.8) 100%);
+  height: 4em;
+  padding: 0 1em;
+}
+
+.vjs-yt-style .vjs-play-progress {
+  background: #ff0000;
+}
+
+.vjs-yt-style .vjs-volume-level {
+  background: #ff0000;
+}
+
+.vjs-yt-style .vjs-progress-holder {
+  height: 0.3em;
+}
+
+.vjs-yt-style .vjs-button > .vjs-icon-placeholder:before {
+  font-size: 1.8em;
+}
+
+.vjs-yt-style .vjs-big-play-button {
+  background: rgba(0,0,0,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+  line-height: 4em;
+  font-size: 1.2em;
+}
+
+.vjs-yt-style .vjs-big-play-button:hover {
+  background: rgba(0,0,0,0.9);
+}
+
+.vjs-yt-style .vjs-slider:hover {
+  box-shadow: 0 0 1em #ff0000;
+}
+
+.vjs-yt-style .vjs-time-display {
+  display: block;
+}
+
+.vjs-yt-style .vjs-remaining-time {
+  display: none;
+}
