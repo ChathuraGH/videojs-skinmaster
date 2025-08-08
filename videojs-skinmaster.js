@@ -95,13 +95,18 @@
     // Update player class
     const playerEl = player.el();
     if (playerEl) {
-      // Remove all existing skin classes
+      // Only remove custom skin classes, preserve essential VideoJS classes
       const classList = playerEl.classList;
-      const skinClasses = Array.from(classList).filter(className => className.startsWith('vjs-'));
-      skinClasses.forEach(className => {
-        if (className !== 'video-js') {
-          classList.remove(className);
-        }
+      const customSkinClasses = ['vjs-yt-style', 'vjs-sublime-skin', 'vjs-iplayer-skin', 'vjs-sublime-inspired', 
+                                 'vjs-netflix-dark', 'vjs-material', 'vjs-nuevo', 'vjs-vimuse', 'vjs-dark-neon',
+                                 'vjs-glassmorphism', 'vjs-retro', 'vjs-apple-tv', 'vjs-gaming', 'vjs-spotify',
+                                 'vjs-discord', 'vjs-tiktok', 'vjs-twitch', 'vjs-fluent', 'vjs-big-sur',
+                                 'vjs-ubuntu', 'vjs-material-you', 'vjs-ps5', 'vjs-minimal-white', 'vjs-sunset',
+                                 'vjs-cyberpunk', 'vjs-nature', 'vjs-ocean'];
+      
+      // Remove only custom skin classes
+      customSkinClasses.forEach(className => {
+        classList.remove(className);
       });
       
       // Add new skin class
@@ -217,10 +222,10 @@
       <div class="skinmaster-skin-item ${index === currentSkinIndex ? 'active' : ''}" 
            data-index="${index}">
                  <div class="skinmaster-skin-preview">
-           <img src="${skin.preview_images[0] || 'https://via.placeholder.com/400x240/333333/ffffff?text=' + encodeURIComponent(skin.short_name)}" 
+           <img src="${skin.preview_images[0] || 'https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent(skin.short_name) + '&bgColor=%23333333&textColor=%23ffffff'}" 
                 alt="${skin.name}" 
                 loading="lazy"
-                onerror="this.src='https://via.placeholder.com/400x240/333333/ffffff?text=' + encodeURIComponent('${skin.short_name}')">
+                onerror="this.src='https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent('${skin.short_name}') + '&bgColor=%23333333&textColor=%23ffffff'">
            <div class="skinmaster-skin-overlay">
             <div class="skinmaster-skin-name">${skin.short_name}</div>
             <div class="skinmaster-skin-description">${skin.description}</div>

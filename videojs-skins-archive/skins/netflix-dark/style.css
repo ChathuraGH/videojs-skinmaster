@@ -1,29 +1,8 @@
-/* Netflix Dark Skin */
+/* Netflix Dark Theme for VideoJS */
 .video-js.vjs-netflix-dark {
   font-family: "Netflix Sans", "Helvetica Neue", Arial, sans-serif;
   color: #fff;
   background-color: #141414;
-}
-
-.vjs-netflix-dark .vjs-control-bar {
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.9) 100%);
-  height: 4em;
-}
-
-.vjs-netflix-dark .vjs-play-progress {
-  background: #e50914;
-}
-
-.vjs-netflix-dark .vjs-volume-level {
-  background: #e50914;
-}
-
-.vjs-netflix-dark .vjs-big-play-button {
-  background: rgba(0,0,0,0.8);
-  border: 2px solid #e50914;
-  border-radius: 50%;
-  width: 5em;
-  height: 5em;
 }
 
 .vjs-netflix-dark .vjs-poster {
@@ -31,24 +10,143 @@
   background-position: center;
 }
 
-.vjs-netflix-dark .vjs-loading-spinner {
-  border-color: #e50914 transparent transparent transparent;
+.vjs-netflix-dark .vjs-control-bar {
+  background: linear-gradient(180deg, transparent 0%, rgba(20,20,20,0.8) 30%, rgba(20,20,20,0.95) 100%);
+  height: 3.5em;
+  padding: 0 1em;
+  border-radius: 0 0 8px 8px;
+}
+
+.vjs-netflix-dark .vjs-big-play-button {
+  background: rgba(229,9,20,0.9);
+  border: none;
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+  font-size: 2em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(229,9,20,0.4);
+}
+
+.vjs-netflix-dark .vjs-big-play-button:hover {
+  background: rgba(229,9,20,1);
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(229,9,20,0.6);
+}
+
+.vjs-netflix-dark .vjs-play-progress {
+  background: #e50914;
+  background: linear-gradient(90deg, #e50914 0%, #ff1e2d 100%);
+  box-shadow: 0 0 8px rgba(229,9,20,0.5);
+}
+
+.vjs-netflix-dark .vjs-volume-level {
+  background: #e50914;
+}
+
+.vjs-netflix-dark .vjs-progress-holder {
+  height: 0.4em;
+  margin: 0;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.2);
+}
+
+.vjs-netflix-dark .vjs-progress-control:hover .vjs-progress-holder {
+  height: 0.6em;
+  transition: height 0.2s ease;
+}
+
+.vjs-netflix-dark .vjs-slider {
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.vjs-netflix-dark .vjs-slider:hover {
+  box-shadow: 0 0 1em rgba(229,9,20,0.5);
+}
+
+.vjs-netflix-dark .vjs-button {
+  color: #fff;
+  transition: all 0.2s ease;
 }
 
 .vjs-netflix-dark .vjs-button:hover {
   color: #e50914;
+  text-shadow: 0 0 8px rgba(229,9,20,0.6);
+}
+
+.vjs-netflix-dark .vjs-time-display {
+  display: block;
+  font-weight: 500;
+}
+
+.vjs-netflix-dark .vjs-remaining-time {
+  display: none;
 }
 
 .vjs-netflix-dark .vjs-menu-button-popup .vjs-menu {
   background: rgba(20,20,20,0.95);
-  border: 1px solid #e50914;
+  border: 1px solid rgba(229,9,20,0.3);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
 }
 
 .vjs-netflix-dark .vjs-menu li {
-  background: transparent;
-  border-bottom: 1px solid #333;
+  color: #fff;
+  padding: 0.5em 1em;
+  transition: background 0.2s ease;
 }
 
 .vjs-netflix-dark .vjs-menu li:hover {
   background: rgba(229,9,20,0.2);
+}
+
+.vjs-netflix-dark .vjs-menu li.vjs-selected {
+  background: rgba(229,9,20,0.4);
+  color: #fff;
+}
+
+.vjs-netflix-dark .vjs-loading-spinner {
+  border-top-color: #e50914;
+  border-right-color: #e50914;
+}
+
+.vjs-netflix-dark .vjs-volume-panel {
+  transition: all 0.3s ease;
+}
+
+.vjs-netflix-dark .vjs-volume-panel:hover {
+  width: 8em;
+}
+
+.vjs-netflix-dark .vjs-fullscreen-control,
+.vjs-netflix-dark .vjs-picture-in-picture-control {
+  margin-left: 0.5em;
+}
+
+/* Gradient overlay effect */
+.vjs-netflix-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(20,20,20,0.1) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Custom Netflix red accent colors for various states */
+.vjs-netflix-dark .vjs-seek-to-live-control {
+  color: #e50914;
+}
+
+.vjs-netflix-dark .vjs-live-badge {
+  background: #e50914;
+  color: #fff;
+  border-radius: 2px;
+  padding: 0.2em 0.4em;
+  font-size: 0.8em;
+  font-weight: bold;
 }

@@ -1,23 +1,21 @@
-/* Material Design Skin */
+/* Material Design Skin for VideoJS */
 .video-js.vjs-material {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", "Material Icons", sans-serif;
   color: #fff;
   background-color: #212121;
+}
+
+.vjs-material .vjs-poster {
+  background-size: cover;
+  background-position: center;
 }
 
 .vjs-material .vjs-control-bar {
   background: rgba(33,33,33,0.9);
   height: 3.5em;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
-}
-
-.vjs-material .vjs-play-progress {
-  background: #2196f3;
-  box-shadow: 0 0 4px rgba(33,150,243,0.4);
-}
-
-.vjs-material .vjs-volume-level {
-  background: #2196f3;
+  backdrop-filter: blur(8px);
+  padding: 0 1em;
 }
 
 .vjs-material .vjs-big-play-button {
@@ -27,9 +25,164 @@
   width: 4em;
   height: 4em;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.vjs-material .vjs-big-play-button:hover {
+  background: rgba(33,150,243,0.9);
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(33,150,243,0.4);
+}
+
+.vjs-material .vjs-play-progress {
+  background: #2196f3;
+  background: linear-gradient(90deg, #2196f3 0%, #21cbf3 100%);
+  box-shadow: 0 0 4px rgba(33,150,243,0.4);
+}
+
+.vjs-material .vjs-volume-level {
+  background: #2196f3;
+}
+
+.vjs-material .vjs-progress-holder {
+  height: 0.3em;
+  margin: 0;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.2);
+}
+
+.vjs-material .vjs-progress-control:hover .vjs-progress-holder {
+  height: 0.5em;
+  transition: height 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.vjs-material .vjs-slider {
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.vjs-material .vjs-slider:hover {
+  box-shadow: 0 0 8px rgba(33,150,243,0.3);
+}
+
+.vjs-material .vjs-button {
+  color: #fff;
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 50%;
+  margin: 0 0.2em;
 }
 
 .vjs-material .vjs-button:hover {
   background: rgba(255,255,255,0.1);
+  color: #2196f3;
+}
+
+.vjs-material .vjs-button:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+.vjs-material .vjs-time-display {
+  display: block;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.vjs-material .vjs-menu-button-popup .vjs-menu {
+  background: rgba(33,33,33,0.95);
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.vjs-material .vjs-menu li {
+  color: #fff;
+  padding: 0.8em 1.2em;
+  transition: background 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  font-weight: 400;
+}
+
+.vjs-material .vjs-menu li:hover {
+  background: rgba(33,150,243,0.12);
+}
+
+.vjs-material .vjs-menu li.vjs-selected {
+  background: rgba(33,150,243,0.2);
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.vjs-material .vjs-loading-spinner {
+  border-top-color: #2196f3;
+  border-right-color: #2196f3;
+}
+
+.vjs-material .vjs-volume-panel {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.vjs-material .vjs-volume-panel:hover {
+  width: 8em;
+}
+
+.vjs-material .vjs-volume-bar {
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.vjs-material .vjs-volume-level {
+  background: #2196f3;
+  border-radius: 2px;
+}
+
+/* Material Design elevation */
+.vjs-material .vjs-control-bar {
+  box-shadow: 
+    0 3px 1px -2px rgba(0,0,0,.2),
+    0 2px 2px 0 rgba(0,0,0,.14),
+    0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+/* Ripple effect on buttons */
+.vjs-material .vjs-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.vjs-material .vjs-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(33,150,243,0.3);
   border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.vjs-material .vjs-button:active::before {
+  width: 40px;
+  height: 40px;
+}
+
+/* Custom scrollbar for menus */
+.vjs-material .vjs-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.vjs-material .vjs-menu::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+.vjs-material .vjs-menu::-webkit-scrollbar-thumb {
+  background: #2196f3;
+  border-radius: 2px;
+}
+
+.vjs-material .vjs-menu::-webkit-scrollbar-thumb:hover {
+  background: #1976d2;
 }
