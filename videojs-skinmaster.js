@@ -233,24 +233,24 @@
     `;
   }
 
-  // Generate skins grid HTML
+    // Generate skins grid HTML
   function generateSkinsGrid() {
     return skinsList.map((skin, index) => `
-      <div class="skinmaster-skin-item ${index === currentSkinIndex ? 'active' : ''}" 
+      <div class="skinmaster-skin-item ${index === currentSkinIndex ? 'active' : ''}"
            data-index="${index}">
-                 <div class="skinmaster-skin-preview">
-           <img src="${skin.preview_images[0] || 'https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent(skin.short_name) + '&bgColor=%23333333&textColor=%23ffffff'}" 
-                alt="${skin.name}" 
-                loading="lazy"
-                onerror="this.src='https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent('${skin.short_name}') + '&bgColor=%23333333&textColor=%23ffffff'">
-           <div class="skinmaster-skin-overlay">
+        <div class="skinmaster-skin-preview">
+          <img src="${skin.preview_images[0] || 'https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent(skin.short_name) + '&bgColor=%23333333&textColor=%23ffffff'}" 
+               alt="${skin.name}" 
+               loading="lazy"
+               onerror="this.src='https://images.placeholders.dev/?width=400&height=240&text=' + encodeURIComponent('${skin.short_name}') + '&bgColor=%23333333&textColor=%23ffffff'">
+          <div class="skinmaster-skin-overlay">
             <div class="skinmaster-skin-name">${skin.short_name}</div>
             <div class="skinmaster-skin-description">${skin.description}</div>
           </div>
         </div>
         <div class="skinmaster-skin-info">
-          <h4>${skin.name}</h4>
-          <p>${skin.short_name}</p>
+          <div class="skinmaster-skin-title">${skin.name}</div>
+          <div class="skinmaster-skin-desc">${skin.description}</div>
         </div>
       </div>
     `).join('');
@@ -491,10 +491,35 @@
     // Load settings
     loadSettings();
     
-    // Initialize modal
+    // Initialize modal with proper container handling
     if (!document.getElementById('skinmaster-modal')) {
-      document.body.insertAdjacentHTML('beforeend', createModal());
+      // Determine the correct container for the modal
+      const getModalContainer = () => {
+        // Check if player is in fullscreen
+        if (player.isFullscreen()) {
+          return player.el() || document.body;
+        }
+        return document.body;
+      };
+      
+      // Create modal in appropriate container
+      getModalContainer().insertAdjacentHTML('beforeend', createModal());
       setupModalEvents(player);
+      
+      // Listen for fullscreen changes to reposition modal if needed
+      player.on('fullscreenchange', () => {
+        const modal = document.getElementById('skinmaster-modal');
+        if (modal) {
+          const currentContainer = modal.parentNode;
+          const newContainer = getModalContainer();
+          
+          // Move modal to correct container if needed
+          if (currentContainer !== newContainer) {
+            currentContainer.removeChild(modal);
+            newContainer.appendChild(modal);
+          }
+        }
+      });
     }
     
     // Setup hotkeys
