@@ -327,8 +327,22 @@
   padding: 4px 8px;
   font-size: 12px;
   font-family: monospace;
-  width: 80px;
+  width: 100px;
   text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.skinmaster-hotkey input:hover {
+  border-color: #4fc3f7;
+  background: #333;
+}
+
+.skinmaster-hotkey input:focus {
+  border-color: #4fc3f7;
+  background: #1a1a1a;
+  box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+  outline: none;
 }
 
 /* Responsive Design */

@@ -1,0 +1,40 @@
+/* VideoJS Sublime Skin */
+.video-js.vjs-sublime-skin {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  background-color: #000;
+}
+
+.vjs-sublime-skin .vjs-control-bar {
+  background: rgba(0,0,0,0.8);
+  height: 3.5em;
+}
+
+.vjs-sublime-skin .vjs-play-progress {
+  background: #36c5f0;
+}
+
+.vjs-sublime-skin .vjs-volume-level {
+  background: #36c5f0;
+}
+
+.vjs-sublime-skin .vjs-big-play-button {
+  background: rgba(0,0,0,0.7);
+  border: 2px solid #36c5f0;
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+}
+
+.vjs-sublime-skin .vjs-slider {
+  background: rgba(255,255,255,0.3);
+}
+
+.vjs-sublime-skin .vjs-progress-holder {
+  height: 0.3em;
+  margin: 0;
+}
+
+.vjs-sublime-skin .vjs-button:hover {
+  color: #36c5f0;
+}

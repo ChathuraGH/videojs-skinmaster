@@ -180,19 +180,19 @@
                   <div class="skinmaster-hotkeys">
                     <div class="skinmaster-hotkey">
                       <span>Toggle Modal:</span>
-                      <input type="text" id="hotkey-modal" value="${settings.hotkeys.toggleModal}" readonly>
+                      <input type="text" id="hotkey-modal" value="${settings.hotkeys.toggleModal}" placeholder="Press a key...">
                     </div>
                     <div class="skinmaster-hotkey">
                       <span>Toggle Skin:</span>
-                      <input type="text" id="hotkey-toggle" value="${settings.hotkeys.activateDeactivate}" readonly>
+                      <input type="text" id="hotkey-toggle" value="${settings.hotkeys.activateDeactivate}" placeholder="Press a key...">
                     </div>
                     <div class="skinmaster-hotkey">
                       <span>Next Skin:</span>
-                      <input type="text" id="hotkey-next" value="${settings.hotkeys.nextSkin}" readonly>
+                      <input type="text" id="hotkey-next" value="${settings.hotkeys.nextSkin}" placeholder="Press a key...">
                     </div>
                     <div class="skinmaster-hotkey">
                       <span>Previous Skin:</span>
-                      <input type="text" id="hotkey-prev" value="${settings.hotkeys.previousSkin}" readonly>
+                      <input type="text" id="hotkey-prev" value="${settings.hotkeys.previousSkin}" placeholder="Press a key...">
                     </div>
                   </div>
                 </div>
@@ -216,11 +216,12 @@
     return skinsList.map((skin, index) => `
       <div class="skinmaster-skin-item ${index === currentSkinIndex ? 'active' : ''}" 
            data-index="${index}">
-        <div class="skinmaster-skin-preview">
-          <img src="${skin.preview_images[0] || '/api/placeholder/200/120'}" 
-               alt="${skin.name}" 
-               loading="lazy">
-          <div class="skinmaster-skin-overlay">
+                 <div class="skinmaster-skin-preview">
+           <img src="${skin.preview_images[0] || 'https://via.placeholder.com/400x240/333333/ffffff?text=' + encodeURIComponent(skin.short_name)}" 
+                alt="${skin.name}" 
+                loading="lazy"
+                onerror="this.src='https://via.placeholder.com/400x240/333333/ffffff?text=' + encodeURIComponent('${skin.short_name}')">
+           <div class="skinmaster-skin-overlay">
             <div class="skinmaster-skin-name">${skin.short_name}</div>
             <div class="skinmaster-skin-description">${skin.description}</div>
           </div>
@@ -249,6 +250,12 @@
     const searchInput = modal.querySelector('#skinmaster-search');
     const defaultSkinSelect = modal.querySelector('#default-skin');
     const storageCheckbox = modal.querySelector('#enable-storage');
+    
+    // Hotkey inputs
+    const hotkeyModalInput = modal.querySelector('#hotkey-modal');
+    const hotkeyToggleInput = modal.querySelector('#hotkey-toggle');
+    const hotkeyNextInput = modal.querySelector('#hotkey-next');
+    const hotkeyPrevInput = modal.querySelector('#hotkey-prev');
 
     // Close modal
     closeBtn.addEventListener('click', () => toggleModal(player));
@@ -314,6 +321,46 @@
       settings.storage.enabled = e.target.checked;
       saveSettings();
     });
+
+    // Hotkey capture functionality
+    function setupHotkeyCapture(input, settingKey) {
+      input.addEventListener('keydown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Clear the input first
+        input.value = '';
+        
+        // Capture the key
+        const keyCode = e.code;
+        input.value = keyCode;
+        
+        // Update settings
+        settings.hotkeys[settingKey] = keyCode;
+        saveSettings();
+        
+        // Blur the input
+        input.blur();
+      });
+      
+      input.addEventListener('focus', (e) => {
+        e.target.value = '';
+        e.target.placeholder = 'Press any key...';
+      });
+      
+      input.addEventListener('blur', (e) => {
+        if (!e.target.value) {
+          e.target.value = settings.hotkeys[settingKey];
+        }
+        e.target.placeholder = 'Press a key...';
+      });
+    }
+
+    // Setup hotkey capture for all inputs
+    setupHotkeyCapture(hotkeyModalInput, 'toggleModal');
+    setupHotkeyCapture(hotkeyToggleInput, 'activateDeactivate');
+    setupHotkeyCapture(hotkeyNextInput, 'nextSkin');
+    setupHotkeyCapture(hotkeyPrevInput, 'previousSkin');
   }
 
   // Toggle modal

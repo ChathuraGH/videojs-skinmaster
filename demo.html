@@ -63,6 +63,8 @@
         .video-js {
             border-radius: 12px;
             overflow: hidden;
+            width: 100%;
+            max-width: 100%;
         }
         
         .controls-info {
@@ -174,10 +176,8 @@
                 class="video-js vjs-default-skin"
                 controls
                 preload="auto"
-                width="100%"
-                height="500"
                 poster="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800&h=450&fit=crop"
-                data-setup="{}">
+                data-setup='{"responsive": true, "fluid": true, "aspectRatio": "16:9"}'>
                 <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
                 <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.webm" type="video/webm">
                 <p class="vjs-no-js">

@@ -1,0 +1,36 @@
+/* VideoJS iPlayer Skin */
+.video-js.vjs-iplayer-skin {
+  font-family: "BBC Reith Sans", Helvetica, Arial, sans-serif;
+  color: #fff;
+  background-color: #000;
+}
+
+.vjs-iplayer-skin .vjs-control-bar {
+  background: rgba(0,0,0,0.9);
+  height: 3.2em;
+}
+
+.vjs-iplayer-skin .vjs-play-progress {
+  background: #fa6400;
+}
+
+.vjs-iplayer-skin .vjs-volume-level {
+  background: #fa6400;
+}
+
+.vjs-iplayer-skin .vjs-big-play-button {
+  background: rgba(0,0,0,0.8);
+  border: none;
+  border-radius: 6px;
+  width: 3.5em;
+  height: 3.5em;
+}
+
+.vjs-iplayer-skin .vjs-button:hover {
+  color: #fa6400;
+}
+
+.vjs-iplayer-skin .vjs-menu-button-popup .vjs-menu {
+  background: rgba(0,0,0,0.9);
+  border: 1px solid #fa6400;
+}

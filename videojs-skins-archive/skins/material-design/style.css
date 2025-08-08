@@ -1,0 +1,35 @@
+/* Material Design Skin */
+.video-js.vjs-material {
+  font-family: "Roboto", sans-serif;
+  color: #fff;
+  background-color: #212121;
+}
+
+.vjs-material .vjs-control-bar {
+  background: rgba(33,33,33,0.9);
+  height: 3.5em;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+}
+
+.vjs-material .vjs-play-progress {
+  background: #2196f3;
+  box-shadow: 0 0 4px rgba(33,150,243,0.4);
+}
+
+.vjs-material .vjs-volume-level {
+  background: #2196f3;
+}
+
+.vjs-material .vjs-big-play-button {
+  background: rgba(33,33,33,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.vjs-material .vjs-button:hover {
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
