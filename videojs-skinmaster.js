@@ -76,44 +76,42 @@
     }
   }
 
-  // Apply skin to player
+    // Apply skin to player
   function applySkin(player, skinIndex) {
     if (skinIndex < 0 || skinIndex >= skinsList.length) return false;
 
     const skin = skinsList[skinIndex];
     
-    // Remove previous skin
-    removeSkin(player);
-    
-    // Create and inject new style element
-    appliedStyleElement = document.createElement('style');
-    appliedStyleElement.type = 'text/css';
-    appliedStyleElement.setAttribute('data-skinmaster', 'active');
-    appliedStyleElement.innerHTML = skin.skin;
-    document.head.appendChild(appliedStyleElement);
-    
-    // Update player class
-    const playerEl = player.el();
-    if (playerEl) {
-      // Only remove custom skin classes, preserve essential VideoJS classes
-      const classList = playerEl.classList;
-      const customSkinClasses = ['vjs-yt-style', 'vjs-sublime-skin', 'vjs-iplayer-skin', 'vjs-sublime-inspired', 
-                                 'vjs-netflix-dark', 'vjs-material', 'vjs-nuevo', 'vjs-vimuse', 'vjs-dark-neon',
-                                 'vjs-glassmorphism', 'vjs-retro', 'vjs-apple-tv', 'vjs-gaming', 'vjs-spotify',
-                                 'vjs-discord', 'vjs-tiktok', 'vjs-twitch', 'vjs-fluent', 'vjs-big-sur',
-                                 'vjs-ubuntu', 'vjs-material-you', 'vjs-ps5', 'vjs-minimal-white', 'vjs-sunset',
-                                 'vjs-cyberpunk', 'vjs-nature', 'vjs-ocean'];
+    try {
+      // Remove previous skin
+      removeSkin(player);
       
-      // Remove only custom skin classes
-      customSkinClasses.forEach(className => {
-        classList.remove(className);
-      });
+      // Create and inject new style element with skin CSS
+      appliedStyleElement = document.createElement('style');
+      appliedStyleElement.type = 'text/css';
+      appliedStyleElement.setAttribute('data-skinmaster', 'active');
+      appliedStyleElement.setAttribute('data-skin-name', skin.short_name);
       
-      // Add new skin class
-      const skinClassName = skin.skin.match(/\.video-js\.([^\s{]+)/);
-      if (skinClassName && skinClassName[1]) {
-        classList.add(skinClassName[1]);
+      // Inject the skin CSS directly without relying on classes
+      appliedStyleElement.innerHTML = skin.skin;
+      document.head.appendChild(appliedStyleElement);
+      
+      // Add skin class to player element for targeting
+      const playerEl = player.el();
+      if (playerEl && playerEl.classList) {
+        // Extract skin class name from CSS
+        const skinClassName = skin.skin.match(/\.video-js\.([^\s{,.]+)/);
+        if (skinClassName && skinClassName[1]) {
+          console.log('Adding skin class:', skinClassName[1]);
+          playerEl.classList.add(skinClassName[1]);
+        } else {
+          console.warn('Could not extract skin class from CSS for skin:', skin.name);
+        }
       }
+      
+    } catch (error) {
+      console.error('Error applying skin:', error);
+      return false;
     }
     
     currentSkinIndex = skinIndex;
@@ -130,19 +128,38 @@
 
   // Remove current skin
   function removeSkin(player) {
-    if (appliedStyleElement) {
-      appliedStyleElement.remove();
-      appliedStyleElement = null;
-    }
-    
-    // Remove skin classes from player
-    const playerEl = player.el();
-    if (playerEl) {
-      const classList = playerEl.classList;
-      const skinClasses = Array.from(classList).filter(className => 
-        className.startsWith('vjs-') && className !== 'video-js'
-      );
-      skinClasses.forEach(className => classList.remove(className));
+    try {
+      // Remove injected style element
+      if (appliedStyleElement && appliedStyleElement.parentNode) {
+        appliedStyleElement.parentNode.removeChild(appliedStyleElement);
+        appliedStyleElement = null;
+      }
+      
+             // Remove only custom skin classes from player, preserve essential VideoJS classes
+       const playerEl = player.el();
+       if (playerEl && playerEl.classList) {
+         console.log('Player classes before removal:', Array.from(playerEl.classList));
+         
+         // List of custom skin classes to remove (not essential VideoJS classes)
+         const customSkinClasses = ['vjs-yt-style', 'vjs-sublime-skin', 'vjs-iplayer-skin', 'vjs-sublime-inspired', 
+                                    'vjs-netflix-dark', 'vjs-material', 'vjs-nuevo', 'vjs-vimuse', 'vjs-dark-neon',
+                                    'vjs-glassmorphism', 'vjs-retro', 'vjs-apple-tv', 'vjs-gaming', 'vjs-spotify',
+                                    'vjs-discord', 'vjs-tiktok', 'vjs-twitch', 'vjs-fluent', 'vjs-big-sur',
+                                    'vjs-ubuntu', 'vjs-material-you', 'vjs-ps5', 'vjs-minimal-white', 'vjs-sunset',
+                                    'vjs-cyberpunk', 'vjs-nature', 'vjs-ocean'];
+         
+         // Remove only custom skin classes, preserve all VideoJS system classes
+         customSkinClasses.forEach(className => {
+           if (playerEl.classList.contains(className)) {
+             console.log('Removing custom skin class:', className);
+             playerEl.classList.remove(className);
+           }
+         });
+         
+         console.log('Player classes after removal:', Array.from(playerEl.classList));
+       }
+    } catch (error) {
+      console.error('Error removing skin:', error);
     }
   }
 
