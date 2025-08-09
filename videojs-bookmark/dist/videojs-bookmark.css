@@ -48,7 +48,8 @@
 .vjs-bm-btn { background: #3a86ff; color: #fff; border: none; border-radius: 4px; padding: 6px 10px; cursor: pointer; }
 .vjs-bm-btn.secondary { background: #444; }
 
-.vjs-bm-list { list-style: none; margin: 0; padding: 0; }
+.vjs-bm-list-wrap { position: relative; }
+.vjs-bm-list { list-style: none; margin: 0; padding: 0; position: relative; }
 .vjs-bm-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 8px; }
 .vjs-bm-item:hover { background: rgba(255,255,255,0.05); }
 .vjs-bm-item-left { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
@@ -57,17 +58,18 @@
 .vjs-bm-text { color: #fff; }
 
 .vjs-bm-item-actions { display: flex; gap: 6px; }
-.vjs-bm-progress-gap { height: 6px; margin: 2px 8px; background: rgba(255,255,255,0.08); border-radius: 3px; position: relative; }
-.vjs-bm-progress-dot { position: absolute; top: -2px; width: 10px; height: 10px; background: #3a86ff; border-radius: 50%; transform: translateX(-50%); }
+
+/* Dynamic list position indicator */
+.vjs-bm-list-indicator { position: absolute; left: 0; right: 0; height: 2px; background: #3a86ff; opacity: 0.9; pointer-events: none; }
 
 /* Popup dialog */
 .vjs-bm-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 10001; }
 .vjs-bm-dialog-backdrop.vjs-bm-open { display: block; }
-.vjs-bm-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1d1d1d; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 12px; width: 320px; color: #fff; }
+.vjs-bm-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1d1d1d; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 12px; width: 340px; color: #fff; }
 .vjs-bm-field { display: flex; flex-direction: column; margin-bottom: 8px; }
 .vjs-bm-field label { font-size: 12px; color: #bbb; margin-bottom: 4px; }
 .vjs-bm-field input[type="text"], .vjs-bm-field input[type="number"], .vjs-bm-field input[type="color"] { background: #2a2a2a; border: 1px solid #3a3a3a; color: #fff; padding: 6px 8px; border-radius: 4px; }
-.vjs-bm-field-row { display: flex; gap: 8px; }
+.vjs-bm-field-row { display: flex; gap: 8px; align-items: center; }
 .vjs-bm-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
 
 /* Progress markers on seek bar */

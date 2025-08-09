@@ -51,6 +51,7 @@
         showMarkersOnProgressBar: !!this.options.showMarkersOnProgressBar,
         hotkeys: Object.assign({}, this.options.hotkeys),
         keymap: Object.assign({}, this.options.hotkeys),
+        seekToleranceSec: 0.3,
         dialogOpen: false
       };
 
@@ -74,6 +75,7 @@
           if (typeof saved.showMarkersOnProgressBar === 'boolean') this.state.showMarkersOnProgressBar = saved.showMarkersOnProgressBar;
           if (saved.hotkeys) this.state.hotkeys = Object.assign({}, this.state.hotkeys, saved.hotkeys);
           if (saved.keymap) this.state.keymap = Object.assign({}, this.state.keymap, saved.keymap);
+          if (typeof saved.seekToleranceSec === 'number') this.state.seekToleranceSec = saved.seekToleranceSec;
         }
       } catch (e) {}
     }
@@ -84,7 +86,8 @@
           markers: this.state.markers,
           showMarkersOnProgressBar: this.state.showMarkersOnProgressBar,
           hotkeys: this.state.hotkeys,
-          keymap: this.state.keymap
+          keymap: this.state.keymap,
+          seekToleranceSec: this.state.seekToleranceSec
         }));
       } catch (e) {}
     }
@@ -134,14 +137,14 @@
       // Tab 1 content
       var toolbar = createEl('div', 'vjs-bm-toolbar');
       var addBtn = createEl('button', 'vjs-bm-btn'); addBtn.textContent = 'Add bookmark';
-      var getTimeBtn = createEl('button', 'vjs-bm-btn secondary'); getTimeBtn.textContent = 'Get current time';
       toolbar.appendChild(addBtn);
-      toolbar.appendChild(getTimeBtn);
+      var listWrap = createEl('div', 'vjs-bm-list-wrap');
       var list = createEl('ul', 'vjs-bm-list');
-      var gapsContainer = createEl('div'); // will hold gaps between list items
+      var indicator = createEl('div', 'vjs-bm-list-indicator');
+      listWrap.appendChild(list);
+      listWrap.appendChild(indicator);
       tab1.appendChild(toolbar);
-      tab1.appendChild(gapsContainer);
-      tab1.appendChild(list);
+      tab1.appendChild(listWrap);
 
       // Tab 2 content - settings
       var settings = this.buildSettingsContent();
@@ -167,15 +170,18 @@
       tabBtn1.addEventListener('click', function(){ tabBtn1.classList.add('vjs-bm-active'); tabBtn2.classList.remove('vjs-bm-active'); tab1.classList.add('vjs-bm-active'); tab2.classList.remove('vjs-bm-active'); });
       tabBtn2.addEventListener('click', function(){ tabBtn2.classList.add('vjs-bm-active'); tabBtn1.classList.remove('vjs-bm-active'); tab2.classList.add('vjs-bm-active'); tab1.classList.remove('vjs-bm-active'); });
       addBtn.addEventListener('click', this.openAddDialog.bind(this));
-      getTimeBtn.addEventListener('click', () => { this.lastCapturedTime = this.player.currentTime(); this.openAddDialog(this.lastCapturedTime); });
 
       // Dragging
       this.makeDraggable(this.modal, header);
 
       // Render initial list
       this.listEl = list;
-      this.gapsEl = gapsContainer;
+      this.listWrapEl = listWrap;
+      this.listIndicatorEl = indicator;
       this.renderList();
+      this.updateListIndicator();
+
+      window.addEventListener('resize', this.updateListIndicator.bind(this));
     }
 
     buildSettingsContent() {
@@ -208,6 +214,13 @@
         mappingWrap.appendChild(row);
       });
 
+      // Seek tolerance
+      var tolField = createEl('div', 'vjs-bm-field');
+      var tolLbl = createEl('label'); tolLbl.textContent = 'Prev/Next seek tolerance (seconds)';
+      var tolInput = createEl('input'); tolInput.type = 'number'; tolInput.step = '0.05'; tolInput.min = '0'; tolInput.value = String(this.state.seekToleranceSec || 0);
+      tolField.appendChild(tolLbl); tolField.appendChild(tolInput);
+      tolInput.addEventListener('input', () => { var v = parseFloat(tolInput.value); this.state.seekToleranceSec = isNaN(v) ? 0 : v; this.persistState(); });
+
       // Defaults for add by hotkey
       var defaultsWrap = createEl('div', 'vjs-bm-field');
       var dLbl = createEl('label'); dLbl.textContent = 'Defaults for hotkey add'; defaultsWrap.appendChild(dLbl);
@@ -237,6 +250,7 @@
       wrap.appendChild(field1);
       wrap.appendChild(field2);
       wrap.appendChild(mappingWrap);
+      wrap.appendChild(tolField);
       wrap.appendChild(defaultsWrap);
       wrap.appendChild(textRow);
       wrap.appendChild(ovRow);
@@ -297,6 +311,13 @@
       var timeLbl = createEl('label'); timeLbl.textContent = 'Time (seconds)';
       var timeInput = createEl('input'); timeInput.type = 'number'; timeInput.step = '0.1'; timeInput.value = String(values.time || 0);
       timeField.appendChild(timeLbl); timeField.appendChild(timeInput);
+      if (includeOverlayToggle) {
+        var getBtn = createEl('button', 'vjs-bm-btn secondary');
+        getBtn.textContent = 'Get current time';
+        getBtn.style.marginTop = '6px';
+        getBtn.addEventListener('click', () => { timeInput.value = String(this.player.currentTime().toFixed(2)); });
+        timeField.appendChild(getBtn);
+      }
 
       var textField = createEl('div', 'vjs-bm-field');
       var textLbl = createEl('label'); textLbl.textContent = 'Text';
@@ -401,9 +422,9 @@
     }
 
     bindPlayerEvents() {
-      // Update current gap progress and overlay
+      // Update list indicator, overlay, and marker reached callbacks
       this.player.on('timeupdate', () => {
-        this.updateGapsProgress();
+        this.updateListIndicator();
         this.maybeShowOverlay();
         this.checkMarkerReached();
       });
@@ -412,7 +433,7 @@
 
     bindHotkeys() {
       document.addEventListener('keydown', (e) => {
-        if (!this.state.hotkeys || this.state.hotkeys.enabled === false) return;
+        if (!this.state.hotkeys || this.state.hotkeys.enabled === false || this.isEditableTarget(e.target)) return;
         var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
         var map = this.state.keymap || {};
         if (key === map.toggleModal) { e.preventDefault(); this.toggleModal(); }
@@ -420,6 +441,19 @@
         else if (key === map.prev) { e.preventDefault(); this.prevMarker(); }
         else if (key === map.add) { e.preventDefault(); var t = this.player.currentTime(); var d = this.options.defaultsForHotkeyAdd || {}; this.addMarker({ time: t, text: d.text || 'Bookmark', overlayText: d.overlayText || '', color: d.color || '#3a86ff', overlayEnabled: !!d.overlayEnabled }); }
       });
+    }
+
+    isEditableTarget(target) {
+      var el = target;
+      while (el) {
+        if (el.isContentEditable) return true;
+        if (el.tagName) {
+          var tag = el.tagName.toLowerCase();
+          if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
+        }
+        el = el.parentElement;
+      }
+      return false;
     }
 
     // Overlay behavior (adopted from videojs-markers breakOverlay)
@@ -475,39 +509,61 @@
         remove.addEventListener('click', () => { this.removeMarker(idx); });
       });
 
-      this.renderGaps();
+      this.updateListIndicator();
     }
 
-    renderGaps() {
-      if (!this.gapsEl) return;
-      this.gapsEl.innerHTML = '';
-      var ms = this.state.markers;
-      if (ms.length < 2) return;
-      for (var i = 0; i < ms.length - 1; i++) {
-        var gap = createEl('div', 'vjs-bm-progress-gap');
-        var dot = createEl('div', 'vjs-bm-progress-dot'); gap.appendChild(dot);
-        gap.dataset.start = String(ms[i].time);
-        gap.dataset.end = String(ms[i+1].time);
-        this.gapsEl.appendChild(gap);
-      }
-      this.updateGapsProgress();
-    }
-
-    updateGapsProgress() {
-      if (!this.gapsEl) return;
+    updateListIndicator() {
+      if (!this.listEl || !this.listWrapEl || !this.listIndicatorEl) return;
+      var items = this.listEl.children;
+      var count = items.length;
+      if (count === 0) { this.listIndicatorEl.style.display = 'none'; return; }
       var current = this.player.currentTime();
-      Array.prototype.forEach.call(this.gapsEl.children, (gap) => {
-        var start = parseFloat(gap.dataset.start); var end = parseFloat(gap.dataset.end);
-        var pct = 0;
-        if (current <= start) pct = 0; else if (current >= end) pct = 100; else pct = (current - start) / (end - start) * 100;
-        var dot = gap.firstChild; if (dot) dot.style.left = pct + '%';
-      });
+      var ms = this.state.markers;
+      var wrapRect = this.listWrapEl.getBoundingClientRect();
+      var posY;
+      if (ms.length === 1) {
+        var firstRect = items[0].getBoundingClientRect();
+        posY = (current < (ms[0].time||0)) ? (firstRect.top - wrapRect.top) : (firstRect.bottom - wrapRect.top);
+      } else {
+        // Find bracketing markers
+        var i;
+        for (i = 0; i < ms.length - 1; i++) {
+          if (current >= (ms[i].time||0) && current < (ms[i+1].time||0)) break;
+        }
+        if (current < (ms[0].time||0)) {
+          var topRect = items[0].getBoundingClientRect();
+          posY = topRect.top - wrapRect.top;
+        } else if (current >= (ms[ms.length-1].time||0)) {
+          var lastRect = items[count-1].getBoundingClientRect();
+          posY = lastRect.bottom - wrapRect.top;
+        } else {
+          var prevRect = items[i].getBoundingClientRect();
+          var nextRect = items[i+1].getBoundingClientRect();
+          var yStart = prevRect.bottom - wrapRect.top;
+          var yEnd = nextRect.top - wrapRect.top;
+          var ratio = (current - (ms[i].time||0)) / ((ms[i+1].time||0) - (ms[i].time||0));
+          ratio = Math.min(1, Math.max(0, ratio));
+          posY = yStart + ratio * (yEnd - yStart);
+        }
+      }
+      this.listIndicatorEl.style.display = 'block';
+      this.listIndicatorEl.style.top = Math.round(posY) + 'px';
     }
 
     // Marker operations
+    hasMarkerAtTime(t, excludeIndex) {
+      var eps = 0.01;
+      for (var i = 0; i < this.state.markers.length; i++) {
+        if (i === excludeIndex) continue;
+        if (Math.abs((this.state.markers[i].time || 0) - t) <= eps) return true;
+      }
+      return false;
+    }
+
     addMarker(marker) {
       var m = Object.assign({}, marker);
       if (typeof m.time !== 'number' || isNaN(m.time)) m.time = this.player.currentTime();
+      if (this.hasMarkerAtTime(m.time, -1)) { return; }
       this.state.markers.push(m);
       this.state.markers.sort(function(a,b){ return a.time - b.time; });
       this.persistState();
@@ -519,6 +575,8 @@
     updateMarker(index, fields) {
       if (index < 0 || index >= this.state.markers.length) return;
       var m = this.state.markers[index];
+      var newTime = (fields && typeof fields.time === 'number') ? fields.time : m.time;
+      if (this.hasMarkerAtTime(newTime, index)) { return; }
       Object.assign(m, fields || {});
       this.state.markers.sort(function(a,b){ return a.time - b.time; });
       this.persistState();
@@ -541,16 +599,18 @@
 
     nextMarker() {
       var current = this.player.currentTime();
+      var tol = Math.max(0, this.state.seekToleranceSec || 0);
       for (var i = 0; i < this.state.markers.length; i++) {
-        if ((this.state.markers[i].time || 0) > current + 0.05) { this.player.currentTime(this.state.markers[i].time); return; }
+        if ((this.state.markers[i].time || 0) > current + tol) { this.player.currentTime(this.state.markers[i].time); return; }
       }
       if (this.state.markers.length > 0) this.player.currentTime(this.state.markers[0].time || 0);
     }
 
     prevMarker() {
       var current = this.player.currentTime();
+      var tol = Math.max(0, this.state.seekToleranceSec || 0);
       for (var i = this.state.markers.length - 1; i >= 0; i--) {
-        if ((this.state.markers[i].time || 0) < current - 0.05) { this.player.currentTime(this.state.markers[i].time); return; }
+        if ((this.state.markers[i].time || 0) < current - tol) { this.player.currentTime(this.state.markers[i].time); return; }
       }
       if (this.state.markers.length > 0) this.player.currentTime(this.state.markers[this.state.markers.length - 1].time || 0);
     }
