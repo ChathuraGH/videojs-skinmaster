@@ -1,0 +1,32 @@
+{
+  "name": "videojs-bookmark",
+  "version": "0.1.0",
+  "description": "Video.js plugin to manage bookmarks with UI, hotkeys, and markers styling compatible with videojs-markers options.",
+  "main": "dist/videojs-bookmark.js",
+  "style": "dist/videojs-bookmark.css",
+  "keywords": [
+    "videojs",
+    "video.js",
+    "plugin",
+    "bookmark",
+    "markers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "cp -f src/videojs-bookmark.js dist/videojs-bookmark.js && cp -f src/videojs-bookmark.css dist/videojs-bookmark.css",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "video.js": ">=7.0.0"
+  }
+}
