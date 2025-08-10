@@ -58,6 +58,7 @@
         enableControlBarButton: true,
         enableSettingsTab: true,
         enableAllHotkeys: true,
+        controlBarIcon: 'star',
         dialogOpen: false
       };
 
@@ -90,6 +91,7 @@
           if (typeof saved.enableControlBarButton === 'boolean') this.state.enableControlBarButton = saved.enableControlBarButton;
           if (typeof saved.enableSettingsTab === 'boolean') this.state.enableSettingsTab = saved.enableSettingsTab;
           if (typeof saved.enableAllHotkeys === 'boolean') this.state.enableAllHotkeys = saved.enableAllHotkeys;
+          if (saved.controlBarIcon) this.state.controlBarIcon = saved.controlBarIcon;
         }
       } catch (e) {}
     }
@@ -107,7 +109,8 @@
           enableModal: this.state.enableModal,
           enableControlBarButton: this.state.enableControlBarButton,
           enableSettingsTab: this.state.enableSettingsTab,
-          enableAllHotkeys: this.state.enableAllHotkeys
+          enableAllHotkeys: this.state.enableAllHotkeys,
+          controlBarIcon: this.state.controlBarIcon
         }));
       } catch (e) {}
     }
@@ -127,7 +130,17 @@
         handleClick: function() { self.toggleModal(); }
       });
       videojs.registerComponent('BookmarkButton', BookmarkButton);
-      ControlBar.addChild('BookmarkButton', {}, ControlBar.children().length - 1);
+      this.bookmarkButtonComponent = ControlBar.addChild('BookmarkButton', {}, ControlBar.children().length - 1);
+      this.applyControlBarIcon();
+    }
+
+    applyControlBarIcon() {
+      if (!this.bookmarkButtonComponent) return;
+      var el = this.bookmarkButtonComponent.el ? this.bookmarkButtonComponent.el() : this.bookmarkButtonComponent;
+      var classes = (el.className || '').split(/\s+/);
+      classes.forEach((c) => { if (c.indexOf('vjs-bm-icon-') === 0) el.classList.remove(c); });
+      var name = this.state.controlBarIcon || 'star';
+      el.classList.add('vjs-bm-icon-' + name);
     }
 
     // Modal UI
@@ -274,6 +287,31 @@
       gridCols.addEventListener('input', syncCols);
       gridCols.addEventListener('change', syncCols);
 
+      // Control bar icon selector
+      var iconWrap = createEl('div', 'vjs-bm-field');
+      var iconLbl = createEl('label'); iconLbl.textContent = 'Control bar icon'; iconWrap.appendChild(iconLbl);
+      var iconRow = createEl('div', 'vjs-bm-field-row');
+      var iconSel = createEl('select');
+      var icons = [
+        ['star','★ Star'],
+        ['sparkle','✦ Sparkle'],
+        ['heart','❤ Heart'],
+        ['flag','⚑ Flag'],
+        ['bookmark','🔖 Bookmark'],
+        ['tag','🏷 Tag'],
+        ['pin','📌 Pin'],
+        ['bolt','⚡ Bolt'],
+        ['stopwatch','⏱ Stopwatch'],
+        ['note','📝 Note']
+      ];
+      icons.forEach(([val, label]) => { var o = createEl('option'); o.value = val; o.textContent = label; if (this.state.controlBarIcon === val) o.selected = true; iconSel.appendChild(o); });
+      var iconPreview = createEl('button', 'vjs-bm-btn secondary'); iconPreview.textContent = 'Preview'; iconPreview.style.pointerEvents = 'none';
+      iconRow.appendChild(iconSel); iconRow.appendChild(iconPreview);
+      iconWrap.appendChild(iconRow);
+      var applyPreview = () => { iconPreview.textContent = icons.find(([v])=>v===iconSel.value)?.[1] || 'Preview'; };
+      applyPreview();
+      iconSel.addEventListener('change', () => { this.state.controlBarIcon = iconSel.value; this.persistState(); this.applyControlBarIcon(); applyPreview(); });
+
       // Seek tolerance
       var tolField = createEl('div', 'vjs-bm-field');
       var tolLbl = createEl('label'); tolLbl.textContent = 'Prev/Next seek tolerance (seconds)';
@@ -312,6 +350,7 @@
       wrap.appendChild(field2);
       wrap.appendChild(mappingWrap);
       wrap.appendChild(layoutWrap);
+      wrap.appendChild(iconWrap);
       wrap.appendChild(tolField);
       wrap.appendChild(defaultsWrap);
       wrap.appendChild(textRow);

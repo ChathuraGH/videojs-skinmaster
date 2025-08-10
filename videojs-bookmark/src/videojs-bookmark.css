@@ -1,5 +1,16 @@
 /* Control bar button */
 .vjs-bookmark-button .vjs-icon-placeholder:before { content: "\2605"; }
+/* Icon variations */
+.vjs-bookmark-button.vjs-bm-icon-star .vjs-icon-placeholder:before { content: "\2605"; }
+.vjs-bookmark-button.vjs-bm-icon-sparkle .vjs-icon-placeholder:before { content: "\2726"; }
+.vjs-bookmark-button.vjs-bm-icon-heart .vjs-icon-placeholder:before { content: "\2764"; }
+.vjs-bookmark-button.vjs-bm-icon-flag .vjs-icon-placeholder:before { content: "\2691"; }
+.vjs-bookmark-button.vjs-bm-icon-bookmark .vjs-icon-placeholder:before { content: "\1F516"; }
+.vjs-bookmark-button.vjs-bm-icon-tag .vjs-icon-placeholder:before { content: "\1F3F7"; }
+.vjs-bookmark-button.vjs-bm-icon-pin .vjs-icon-placeholder:before { content: "\1F4CC"; }
+.vjs-bookmark-button.vjs-bm-icon-bolt .vjs-icon-placeholder:before { content: "\26A1"; }
+.vjs-bookmark-button.vjs-bm-icon-stopwatch .vjs-icon-placeholder:before { content: "\23F1"; }
+.vjs-bookmark-button.vjs-bm-icon-note .vjs-icon-placeholder:before { content: "\1F4DD"; }
 .vjs-bookmark-button .vjs-control-text { display: none; }
 
 /* Modal panel */
