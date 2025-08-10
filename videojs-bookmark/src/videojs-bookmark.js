@@ -13,7 +13,10 @@
     onMarkerUpdate: null,
     onMarkerRemove: null,
     onMarkerReached: null,
-    onMarkerClick: null
+    onMarkerClick: null,
+    enableModal: true,
+    enableControlBarButton: true,
+    enableSettingsTab: true
   };
 
   function formatTime(seconds) {
@@ -51,19 +54,24 @@
         showMarkersOnProgressBar: !!this.options.showMarkersOnProgressBar,
         hotkeys: Object.assign({}, this.options.hotkeys),
         keymap: Object.assign({}, this.options.hotkeys),
+        hotkeyEnabled: { toggleModal: true, next: true, prev: true, add: true },
         seekToleranceSec: 0.3,
         listLayout: 'list',
         gridColumns: 2,
-        enableModal: true,
-        enableControlBarButton: true,
-        enableSettingsTab: true,
-        enableAllHotkeys: true,
+        enableModal: !!this.options.enableModal,
+        enableControlBarButton: !!this.options.enableControlBarButton,
+        enableSettingsTab: !!this.options.enableSettingsTab,
         controlBarIcon: 'star',
         dialogOpen: false
       };
 
       this.storageKey = 'videojs-bookmark:' + (player.id ? player.id() : 'default');
       this.restoreState();
+
+      // Allow options to override persisted flags for feature toggles
+      if (typeof this.options.enableModal === 'boolean') this.state.enableModal = this.options.enableModal;
+      if (typeof this.options.enableControlBarButton === 'boolean') this.state.enableControlBarButton = this.options.enableControlBarButton;
+      if (typeof this.options.enableSettingsTab === 'boolean') this.state.enableSettingsTab = this.options.enableSettingsTab;
 
       if (this.state.enableControlBarButton) {
         this.initControlButton();
@@ -84,13 +92,13 @@
           if (typeof saved.showMarkersOnProgressBar === 'boolean') this.state.showMarkersOnProgressBar = saved.showMarkersOnProgressBar;
           if (saved.hotkeys) this.state.hotkeys = Object.assign({}, this.state.hotkeys, saved.hotkeys);
           if (saved.keymap) this.state.keymap = Object.assign({}, this.state.keymap, saved.keymap);
+          if (saved.hotkeyEnabled) this.state.hotkeyEnabled = Object.assign({}, this.state.hotkeyEnabled, saved.hotkeyEnabled);
           if (typeof saved.seekToleranceSec === 'number') this.state.seekToleranceSec = saved.seekToleranceSec;
           if (saved.listLayout) this.state.listLayout = saved.listLayout;
           if (typeof saved.gridColumns === 'number') this.state.gridColumns = saved.gridColumns;
           if (typeof saved.enableModal === 'boolean') this.state.enableModal = saved.enableModal;
           if (typeof saved.enableControlBarButton === 'boolean') this.state.enableControlBarButton = saved.enableControlBarButton;
           if (typeof saved.enableSettingsTab === 'boolean') this.state.enableSettingsTab = saved.enableSettingsTab;
-          if (typeof saved.enableAllHotkeys === 'boolean') this.state.enableAllHotkeys = saved.enableAllHotkeys;
           if (saved.controlBarIcon) this.state.controlBarIcon = saved.controlBarIcon;
         }
       } catch (e) {}
@@ -103,13 +111,13 @@
           showMarkersOnProgressBar: this.state.showMarkersOnProgressBar,
           hotkeys: this.state.hotkeys,
           keymap: this.state.keymap,
+          hotkeyEnabled: this.state.hotkeyEnabled,
           seekToleranceSec: this.state.seekToleranceSec,
           listLayout: this.state.listLayout,
           gridColumns: this.state.gridColumns,
           enableModal: this.state.enableModal,
           enableControlBarButton: this.state.enableControlBarButton,
           enableSettingsTab: this.state.enableSettingsTab,
-          enableAllHotkeys: this.state.enableAllHotkeys,
           controlBarIcon: this.state.controlBarIcon
         }));
       } catch (e) {}
@@ -234,40 +242,25 @@
 
       chk.addEventListener('change', () => { this.state.showMarkersOnProgressBar = chk.checked; this.persistState(); this.renderProgressMarkers(); });
 
-      // Feature toggles
-      var toggles = createEl('div', 'vjs-bm-field');
-      var tLbl = createEl('label'); tLbl.textContent = 'Feature toggles'; toggles.appendChild(tLbl);
-
-      var mkToggle = (label, key) => {
-        var row = createEl('div', 'vjs-bm-field-row');
-        var rlbl = createEl('label'); rlbl.textContent = label; rlbl.style.minWidth = '180px';
-        var inp = createEl('input'); inp.type = 'checkbox'; inp.checked = !!this.state[key];
-        inp.addEventListener('change', () => { this.state[key] = inp.checked; this.persistState(); if (key === 'enableModal') { this.modal.style.display = inp.checked ? '' : 'none'; } if (key === 'enableControlBarButton') { /* requires reload to add/remove button cleanly */ } });
-        row.appendChild(rlbl); row.appendChild(inp);
-        return row;
-      };
-      toggles.appendChild(mkToggle('Base modal', 'enableModal'));
-      toggles.appendChild(mkToggle('Control bar button', 'enableControlBarButton'));
-      toggles.appendChild(mkToggle('Settings tab', 'enableSettingsTab'));
-      toggles.appendChild(mkToggle('All hotkeys', 'enableAllHotkeys'));
-
-      // Hotkeys enable
+      // Hotkeys enable (master)
       var field2 = createEl('div', 'vjs-bm-field');
       var chk2 = createEl('input'); chk2.type = 'checkbox'; chk2.checked = !!(this.state.hotkeys && this.state.hotkeys.enabled !== false); chk2.id = 'bm-hotkeys-enabled';
-      var lbl2 = createEl('label'); lbl2.textContent = 'Enable hotkeys (plugin)'; lbl2.htmlFor = chk2.id;
+      var lbl2 = createEl('label'); lbl2.textContent = 'Enable hotkeys'; lbl2.htmlFor = chk2.id;
       field2.appendChild(lbl2); field2.appendChild(chk2);
       chk2.addEventListener('change', () => { this.state.hotkeys.enabled = chk2.checked; this.persistState(); });
 
-      // Hotkeys mapping
+      // Hotkeys mapping with per-hotkey enable
       var mappingWrap = createEl('div', 'vjs-bm-field');
-      var mapLbl = createEl('label'); mapLbl.textContent = 'Hotkeys mapping (focus input and press a key)'; mappingWrap.appendChild(mapLbl);
+      var mapLbl = createEl('label'); mapLbl.textContent = 'Hotkeys (enable and remap)'; mappingWrap.appendChild(mapLbl);
       var actions = [ ['toggleModal','Toggle modal'], ['next','Next bookmark'], ['prev','Previous bookmark'], ['add','Add bookmark'] ];
       actions.forEach(([key, label]) => {
         var row = createEl('div', 'vjs-bm-field-row');
-        var rlbl = createEl('label'); rlbl.textContent = label; rlbl.style.minWidth = '160px';
+        var enableChk = createEl('input'); enableChk.type = 'checkbox'; enableChk.checked = this.state.hotkeyEnabled[key] !== false; enableChk.title = 'Enable ' + label;
+        var rlbl = createEl('label'); rlbl.textContent = label; rlbl.style.minWidth = '160px'; rlbl.style.marginLeft = '8px';
         var inp = createEl('input'); inp.type = 'text'; inp.value = this.state.keymap[key] || ''; inp.readOnly = true; inp.style.width = '100px'; inp.tabIndex = 0;
         inp.addEventListener('keydown', (e) => { e.preventDefault(); var k = e.key.length === 1 ? e.key.toLowerCase() : e.key; this.state.keymap[key] = k; inp.value = k; this.persistState(); });
-        row.appendChild(rlbl); row.appendChild(inp);
+        enableChk.addEventListener('change', () => { this.state.hotkeyEnabled[key] = enableChk.checked; this.persistState(); });
+        row.appendChild(enableChk); row.appendChild(rlbl); row.appendChild(inp);
         mappingWrap.appendChild(row);
       });
 
@@ -346,7 +339,6 @@
       chkInput.addEventListener('change', () => { this.options.defaultsForHotkeyAdd.overlayEnabled = chkInput.checked; });
 
       wrap.appendChild(field1);
-      wrap.appendChild(toggles);
       wrap.appendChild(field2);
       wrap.appendChild(mappingWrap);
       wrap.appendChild(layoutWrap);
@@ -549,13 +541,14 @@
 
     bindHotkeys() {
       document.addEventListener('keydown', (e) => {
-        if (!this.state.hotkeys || this.state.hotkeys.enabled === false || this.isEditableTarget(e.target) || !this.state.enableAllHotkeys) return;
+        if (!this.state.hotkeys || this.state.hotkeys.enabled === false || this.isEditableTarget(e.target)) return;
         var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
         var map = this.state.keymap || {};
-        if (key === map.toggleModal) { e.preventDefault(); this.toggleModal(); }
-        else if (key === map.next) { e.preventDefault(); this.nextMarker(); }
-        else if (key === map.prev) { e.preventDefault(); this.prevMarker(); }
-        else if (key === map.add) { e.preventDefault(); var t = this.player.currentTime(); var d = this.options.defaultsForHotkeyAdd || {}; this.addMarker({ time: t, text: d.text || 'Bookmark', overlayText: d.overlayText || '', color: d.color || '#3a86ff', overlayEnabled: !!d.overlayEnabled }); }
+        var enabled = this.state.hotkeyEnabled || {};
+        if (key === map.toggleModal && enabled.toggleModal !== false) { e.preventDefault(); this.toggleModal(); }
+        else if (key === map.next && enabled.next !== false) { e.preventDefault(); this.nextMarker(); }
+        else if (key === map.prev && enabled.prev !== false) { e.preventDefault(); this.prevMarker(); }
+        else if (key === map.add && enabled.add !== false) { e.preventDefault(); var t = this.player.currentTime(); var d = this.options.defaultsForHotkeyAdd || {}; this.addMarker({ time: t, text: d.text || 'Bookmark', overlayText: d.overlayText || '', color: d.color || '#3a86ff', overlayEnabled: !!d.overlayEnabled }); }
       });
     }
 
