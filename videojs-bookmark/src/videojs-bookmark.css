@@ -37,22 +37,29 @@
 .vjs-bm-modal-body { display: flex; height: calc(100% - 36px); }
 .vjs-bm-tabs { display: flex; flex-direction: column; width: 100%; }
 .vjs-bm-tab-headers { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.vjs-bm-tab-headers button { flex: 1; padding: 8px 10px; background: transparent; color: #ddd; border: none; cursor: pointer; }
+.vjs-bm-tab-headers button { flex: 1; padding: 8px 10px; background: transparent; color: #ddd; border: none; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.vjs-bm-tab-headers button:hover { background: rgba(255,255,255,0.12); color: #fff; }
 .vjs-bm-tab-headers button.vjs-bm-active { color: #fff; background: rgba(255,255,255,0.08); }
 .vjs-bm-tab { display: none; padding: 10px; overflow: auto; height: 100%; }
 .vjs-bm-tab.vjs-bm-active { display: block; }
 
 /* Bookmarks tab */
 .vjs-bm-toolbar { display: flex; gap: 8px; margin-bottom: 8px; }
-.vjs-bm-btn { background: #3a86ff; color: #fff; border: none; border-radius: 4px; padding: 6px 10px; cursor: pointer; }
-.vjs-bm-btn.secondary { background: #444; }
+.vjs-bm-btn { background: #3a86ff; color: #fff; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, transform .05s ease; }
+.vjs-bm-btn:hover { filter: brightness(1.08); box-shadow: 0 2px 8px rgba(58,134,255,0.35); }
+.vjs-bm-btn:active { transform: translateY(1px); }
+.vjs-bm-btn:focus-visible { outline: 2px solid #a3c4ff; outline-offset: 2px; }
+.vjs-bm-btn.secondary { background: #444; color: #eee; }
+.vjs-bm-btn.secondary:hover { background: #555; box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+.vjs-bm-btn.primary { background: linear-gradient(180deg, #4f9aff, #2f7cf4); box-shadow: 0 2px 8px rgba(47,124,244,0.35); }
+.vjs-bm-btn.primary:hover { background: linear-gradient(180deg, #63a7ff, #3a86ff); }
 
 .vjs-bm-list-wrap { position: relative; }
 .vjs-bm-list { list-style: none; margin: 0; padding: 0; position: relative; }
 .vjs-bm-list.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-gap: 8px; }
-.vjs-bm-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 8px; border-radius: 6px; }
+.vjs-bm-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 8px; border-radius: 6px; transition: background .15s ease, border-color .15s ease; }
 .vjs-bm-list.grid .vjs-bm-item { border: 1px solid rgba(255,255,255,0.1); }
-.vjs-bm-item:hover { background: rgba(255,255,255,0.05); }
+.vjs-bm-item:hover { background: rgba(255,255,255,0.08); }
 .vjs-bm-item-left { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
 .vjs-bm-color { width: 10px; height: 10px; border-radius: 50%; background: #999; }
 .vjs-bm-time { font-family: monospace; color: #ccc; }
@@ -68,7 +75,9 @@
 /* Popup dialog */
 .vjs-bm-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 10001; }
 .vjs-bm-dialog-backdrop.vjs-bm-open { display: block; }
-.vjs-bm-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1d1d1d; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 12px; width: 340px; color: #fff; }
+.vjs-bm-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1d1d1d; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 16px 16px 12px 16px; width: 360px; color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.45); }
+.vjs-bm-dialog-close { position: absolute; top: 6px; right: 8px; border: none; background: transparent; color: #bbb; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background .2s ease, color .2s ease; }
+.vjs-bm-dialog-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .vjs-bm-field { display: flex; flex-direction: column; margin-bottom: 8px; }
 .vjs-bm-field label { font-size: 12px; color: #bbb; margin-bottom: 4px; }
 .vjs-bm-field input[type="text"], .vjs-bm-field input[type="number"], .vjs-bm-field input[type="color"] { background: #2a2a2a; border: 1px solid #3a3a3a; color: #fff; padding: 6px 8px; border-radius: 4px; }

@@ -162,7 +162,7 @@
 
       // Tab 1 content
       var toolbar = createEl('div', 'vjs-bm-toolbar');
-      var addBtn = createEl('button', 'vjs-bm-btn'); addBtn.textContent = 'Add bookmark';
+      var addBtn = createEl('button', 'vjs-bm-btn primary'); addBtn.textContent = 'Add bookmark';
       toolbar.appendChild(addBtn);
       var listWrap = createEl('div', 'vjs-bm-list-wrap');
       var list = createEl('ul', 'vjs-bm-list');
@@ -380,6 +380,7 @@
     openDialog(title, values, onSubmit, includeOverlayToggle) {
       this.dialog.innerHTML = '';
       var h = createEl('div', 'vjs-bm-modal-title'); h.textContent = title; this.dialog.appendChild(h);
+      var xbtn = createEl('button', 'vjs-bm-dialog-close'); xbtn.setAttribute('aria-label', 'Close'); xbtn.textContent = '×'; this.dialog.appendChild(xbtn);
 
       var timeField = createEl('div', 'vjs-bm-field');
       var timeLbl = createEl('label'); timeLbl.textContent = 'Time (seconds)';
@@ -415,7 +416,7 @@
 
       var actions = createEl('div', 'vjs-bm-actions');
       var cancelBtn = createEl('button', 'vjs-bm-btn secondary'); cancelBtn.textContent = 'Close';
-      var saveBtn = createEl('button', 'vjs-bm-btn'); saveBtn.textContent = 'Save';
+      var saveBtn = createEl('button', 'vjs-bm-btn primary'); saveBtn.textContent = 'Save';
       actions.appendChild(cancelBtn); actions.appendChild(saveBtn);
 
       this.dialog.appendChild(timeField);
@@ -427,9 +428,11 @@
 
       this.dialogBackdrop.classList.add('vjs-bm-open');
 
-      cancelBtn.addEventListener('click', () => { this.dialogBackdrop.classList.remove('vjs-bm-open'); });
+      var closeDialog = () => { this.dialogBackdrop.classList.remove('vjs-bm-open'); };
+      xbtn.addEventListener('click', closeDialog);
+      cancelBtn.addEventListener('click', closeDialog);
       saveBtn.addEventListener('click', () => {
-        this.dialogBackdrop.classList.remove('vjs-bm-open');
+        closeDialog();
         onSubmit({ time: timeInput.value, text: textInput.value, overlayEnabled: overlayToggle.checked, overlayText: overlayTextInput.value, color: colorInput.value });
       });
     }
