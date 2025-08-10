@@ -50,7 +50,9 @@
 
 .vjs-bm-list-wrap { position: relative; }
 .vjs-bm-list { list-style: none; margin: 0; padding: 0; position: relative; }
-.vjs-bm-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 8px; }
+.vjs-bm-list.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-gap: 8px; }
+.vjs-bm-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 8px; border-radius: 6px; }
+.vjs-bm-list.grid .vjs-bm-item { border: 1px solid rgba(255,255,255,0.1); }
 .vjs-bm-item:hover { background: rgba(255,255,255,0.05); }
 .vjs-bm-item-left { display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1; }
 .vjs-bm-color { width: 10px; height: 10px; border-radius: 50%; background: #999; }
@@ -61,6 +63,8 @@
 
 /* Dynamic list position indicator */
 .vjs-bm-list-indicator { position: absolute; left: 0; right: 0; height: 2px; background: #3a86ff; opacity: 0.9; pointer-events: none; }
+.vjs-bm-list.grid ~ .vjs-bm-list-indicator { display: none; }
+.vjs-bm-item-current { outline: 2px solid #3a86ff; background: rgba(58,134,255,0.08); border-color: #3a86ff; }
 
 /* Popup dialog */
 .vjs-bm-dialog-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 10001; }

@@ -49,14 +49,16 @@ player.bookmark({
 - `hotkeys`: `{ enabled?: boolean, toggleModal?: string, next?: string, prev?: string, add?: string }`.
 - `defaultsForHotkeyAdd`: default values applied when adding by hotkey `{ text?, overlayText?, color?, overlayEnabled? }`.
 - `seekToleranceSec` (settings tab): sensitivity tolerance for prev/next jumping while video is playing.
+- Feature toggles (settings tab): `enableModal`, `enableControlBarButton`, `enableSettingsTab`, `enableAllHotkeys`.
+- Layout (settings tab): `listLayout` (`list` or `grid`), `gridColumns` (1-8, active only when `grid`).
 - Callbacks: `onMarkerAdd(marker)`, `onMarkerUpdate(marker)`, `onMarkerRemove(marker)`, `onMarkerReached(marker)`, `onMarkerClick(marker)`.
 
 ## Behavior details
 
-- Hotkeys are ignored when a focus is on an editable element (`input`, `textarea`, `select`, or contentEditable).
+- Hotkeys are ignored when a focus is on an editable element (`input`, `textarea`, `select`, or contentEditable) or when `enableAllHotkeys` is disabled.
 - "Get current time" button is inside the Add dialog.
 - Adding/editing bookmarks prevents duplicates at the same timestamp (±0.01s).
-- Dynamic list indicator shows current playback position moving through the bookmarks list.
+- Dynamic list indicator shows current playback position; in grid layout the closest item is highlighted.
 
 ## API
 
