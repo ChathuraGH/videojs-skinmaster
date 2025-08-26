@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoJS SkinMaster Plugin Demo</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.8.0/video-js.css" rel="stylesheet">
+    
+    <!-- SkinMaster Plugin CSS -->
+    <link href="./videojs-skinmaster.css" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .video-container {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .video-js {
+            border-radius: 12px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .controls-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .info-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .info-card h3 {
+            margin-top: 0;
+            color: #4fc3f7;
+            font-size: 1.3rem;
+        }
+        
+        .info-card ul {
+            padding-left: 20px;
+        }
+        
+        .info-card li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .hotkey {
+            background: rgba(0,0,0,0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #4fc3f7;
+        }
+        
+        .feature-highlight {
+            background: linear-gradient(45deg, rgba(79,195,247,0.1) 0%, rgba(79,195,247,0.05) 100%);
+            border-left: 4px solid #4fc3f7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .api-example {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(79,195,247,0.3);
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .video-container {
+                padding: 20px;
+            }
+            
+            .controls-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .status-bar {
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VideoJS SkinMaster</h1>
+        <p>The Ultimate Skin Management Plugin for Video.js</p>
+    </div>
+    
+    <div class="container">
+        <div class="video-container">
+            <video-js
+                id="my-video"
+                class="video-js vjs-default-skin"
+                controls
+                preload="auto"
+                poster="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800&h=450&fit=crop"
+                data-setup='{"responsive": true, "fluid": true, "aspectRatio": "16:9"}'>
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.webm" type="video/webm">
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>.
+                </p>
+            </video-js>
+        </div>
+        
+        <div class="feature-highlight">
+            <h3>🎨 Welcome to VideoJS SkinMaster!</h3>
+            <p>Click the <strong>Skins</strong> button in the control bar or press <span class="hotkey">S</span> to open the skin selector modal. Choose from dozens of beautiful, professionally designed skins!</p>
+        </div>
+        
+        <div class="controls-info">
+            <div class="info-card">
+                <h3>⌨️ Keyboard Shortcuts</h3>
+                <ul>
+                    <li><span class="hotkey">S</span> - Toggle skin selector modal</li>
+                    <li><span class="hotkey">T</span> - Toggle current skin on/off</li>
+                    <li><span class="hotkey">→</span> - Apply next skin</li>
+                    <li><span class="hotkey">←</span> - Apply previous skin</li>
+                    <li><span class="hotkey">ESC</span> - Close modal</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🎯 Features</h3>
+                <ul>
+                    <li>30+ Professional Skins</li>
+                    <li>Live Skin Preview Grid</li>
+                    <li>Instant Skin Switching</li>
+                    <li>Local Storage Preferences</li>
+                    <li>Responsive Design</li>
+                    <li>Accessibility Support</li>
+                    <li>Search & Filter Skins</li>
+                    <li>Settings Management</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🛠️ Plugin API</h3>
+                <p>Easy to integrate and extend:</p>
+                <div class="api-example">
+// Initialize plugin<br>
+player.skinMaster({<br>
+&nbsp;&nbsp;defaultSkinIndex: 0,<br>
+&nbsp;&nbsp;showSkinButton: true<br>
+});<br><br>
+// Use API methods<br>
+player.skinMaster.applySkin(5);<br>
+player.skinMaster.nextSkin();<br>
+player.skinMaster.toggleModal();
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>🎨 Skin Categories</h3>
+                <ul>
+                    <li><strong>Platform Inspired:</strong> YouTube, Netflix, Apple TV</li>
+                    <li><strong>Design Systems:</strong> Material Design, Fluent UI</li>
+                    <li><strong>Themes:</strong> Dark, Light, Cyberpunk, Retro</li>
+                    <li><strong>Professional:</strong> Minimal, Corporate, Clean</li>
+                    <li><strong>Creative:</strong> Glassmorphism, Neon, Gradients</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="status-bar" id="status-bar">
+        Current Skin: Default
+    </div>
+    
+    <!-- Video.js JavaScript -->
+    <script src="https://vjs.zencdn.net/8.8.0/video.min.js"></script>
+    
+    <!-- Skins List -->
+    <script src="./videojs-skins-list.js"></script>
+    
+    <!-- SkinMaster Plugin -->
+    <script src="./videojs-skinmaster.js"></script>
+    
+    <script>
+        // Initialize Video.js player
+        const player = videojs('my-video', {
+            responsive: true,
+            fluid: true,
+            playbackRates: [0.5, 1, 1.25, 1.5, 2],
+            plugins: {
+                // Initialize other plugins here if needed
+            }
+        });
+        
+        // Initialize SkinMaster plugin
+        player.ready(() => {
+            player.skinMaster({
+                defaultSkinIndex: 0,
+                showSkinButton: true,
+                hotkeys: {
+                    toggleModal: 'KeyS',
+                    activateDeactivate: 'KeyT',
+                    nextSkin: 'ArrowRight',
+                    previousSkin: 'ArrowLeft'
+                },
+                storage: {
+                    enabled: true,
+                    key: 'videojs-skinmaster-demo'
+                }
+            });
+            
+            // Listen for skin changes to update status
+            player.on('skinChanged', (event, data) => {
+                const statusBar = document.getElementById('status-bar');
+                if (statusBar && data.skin) {
+                    statusBar.textContent = `Current Skin: ${data.skin.name}`;
+                }
+            });
+        });
+        
+        // Demo functionality for showcasing features
+        let demoInterval;
+        
+        function startDemo() {
+            if (demoInterval) return;
+            
+            console.log('🎬 Starting SkinMaster Demo Cycle...');
+            let currentIndex = 0;
+            
+            demoInterval = setInterval(() => {
+                if (window.videoJSSkinsList && window.videoJSSkinsList.length > 0) {
+                    player.skinMaster.applySkin(currentIndex);
+                    console.log(`🎨 Applied skin: ${window.videoJSSkinsList[currentIndex].name}`);
+                    currentIndex = (currentIndex + 1) % Math.min(10, window.videoJSSkinsList.length); // Cycle through first 10 skins
+                }
+            }, 3000);
+        }
+        
+        function stopDemo() {
+            if (demoInterval) {
+                clearInterval(demoInterval);
+                demoInterval = null;
+                console.log('⏹️ Demo cycle stopped');
+            }
+        }
+        
+        // Add some demo controls (optional)
+        window.skinMasterDemo = {
+            start: startDemo,
+            stop: stopDemo,
+            applySkin: (index) => player.skinMaster.applySkin(index),
+            toggleModal: () => player.skinMaster.toggleModal(),
+            nextSkin: () => player.skinMaster.nextSkin(),
+            previousSkin: () => player.skinMaster.previousSkin()
+        };
+        
+        // Add welcome message
+        player.ready(() => {
+            setTimeout(() => {
+                console.log(`
+🎨 VideoJS SkinMaster Demo Ready!
+
+Try these commands in the console:
+• skinMasterDemo.start() - Start auto skin cycling
+• skinMasterDemo.stop() - Stop auto cycling  
+• skinMasterDemo.toggleModal() - Open skin selector
+• skinMasterDemo.nextSkin() - Apply next skin
+• skinMasterDemo.applySkin(5) - Apply specific skin
+
+Keyboard shortcuts:
+• Press 'S' to open skin selector
+• Press 'T' to toggle current skin
+• Use arrow keys to cycle through skins
+
+Enjoy exploring the skins! 🚀
+                `);
+            }, 1000);
+        });
+        
+        // Handle URL parameters for direct skin selection
+        const urlParams = new URLSearchParams(window.location.search);
+        const skinParam = urlParams.get('skin');
+        if (skinParam && window.videoJSSkinsList) {
+            const skinIndex = window.videoJSSkinsList.findIndex(skin => 
+                skin.short_name.toLowerCase() === skinParam.toLowerCase()
+            );
+            if (skinIndex !== -1) {
+                player.ready(() => {
+                    setTimeout(() => {
+                        player.skinMaster.applySkin(skinIndex);
+                    }, 500);
+                });
+            }
+        }
+        
+        // Error handling
+        player.on('error', (error) => {
+            console.error('Video.js error:', error);
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopDemo();
+            if (player) {
+                player.dispose();
+            }
+        });
+    </script>
+</body>
+</html>
