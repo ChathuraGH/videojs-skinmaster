@@ -1,4 +1,40 @@
-# VideoJS SkinMaster Plugin-
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [VideoJS SkinMaster Plugin](#videojs-skinmaster-plugin)
+  - [🎨 Features](#-features)
+  - [🚀 Quick Start](#-quick-start)
+    - [1. Include Required Files](#1-include-required-files)
+    - [2. Initialize Plugin](#2-initialize-plugin)
+    - [3. Start Using](#3-start-using)
+  - [⌨️ Keyboard Shortcuts](#-keyboard-shortcuts)
+  - [🎯 API Reference](#-api-reference)
+    - [Plugin Options](#plugin-options)
+    - [Public Methods](#public-methods)
+    - [Events](#events)
+  - [🎨 Available Skins](#-available-skins)
+    - [Platform Inspired](#platform-inspired)
+    - [Design Systems](#design-systems)
+    - [Themes & Styles](#themes--styles)
+    - [Creative & Artistic](#creative--artistic)
+    - [Professional](#professional)
+  - [📁 Project Structure](#-project-structure)
+  - [🔧 Customization](#-customization)
+    - [Adding Custom Skins](#adding-custom-skins)
+    - [Custom Hotkeys](#custom-hotkeys)
+  - [📱 Responsive Design](#-responsive-design)
+  - [♿ Accessibility](#-accessibility)
+  - [🌐 Browser Compatibility](#-browser-compatibility)
+  - [📄 License](#-license)
+  - [🤝 Contributing](#-contributing)
+  - [🐛 Issues & Support](#-issues--support)
+  - [📝 Changelog](#-changelog)
+    - [v1.0.0](#v100)
+  - [🙏 Credits](#-credits)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# VideoJS SkinMaster Plugin
 
 The ultimate skin management plugin for Video.js with 30+ professionally designed skins, live preview, and intuitive controls.
 
