@@ -1,4 +1,4 @@
-# VideoJS SkinMaster Plugin--------------------
+# VideoJS SkinMaster Plugin
 
 The ultimate skin management plugin for Video.js with 30+ professionally designed skins, live preview, and intuitive controls.
 
