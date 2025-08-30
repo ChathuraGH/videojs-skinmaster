@@ -6,7 +6,7 @@
 const videoJSSkinsList = [
   {
     index: 1,
-    source_url: 'https://github.com/paidless/videojs-yt-style',
+    source_url: "https://github.com/paidless/videojs-yt-style",
     skin: `
 /* VideoJS YouTube Style Skin */
 .video-js.vjs-yt-style {
