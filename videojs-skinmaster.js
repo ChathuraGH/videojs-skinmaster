@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * VideoJS SkinMaster Plugin
  * A comprehensive skin management plugin for Video.js

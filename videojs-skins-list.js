@@ -1,6 +1,5 @@
 /* eslint-disable */
 
-
 /**
  * VideoJS Skins Collection - Complete List of 100 Premium Skins
  * Each skin contains: index, source_url, skin (CSS), skin_import, name, short_name, description, preview_images, demo_url, and additional resources

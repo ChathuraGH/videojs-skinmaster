@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /* Generated VideoJS Skins List 2 - 15 Advanced Visual Effects Skins */
 
 const generatedVideoJSSkinsList2 = [

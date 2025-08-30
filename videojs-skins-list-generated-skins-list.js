@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /* Generated VideoJS Skins List - 10 Brand New Skins */
 
 const generatedVideoJSSkinsList = [

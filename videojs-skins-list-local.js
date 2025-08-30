@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * VideoJS Skins Collection - Local Archive Version
  * This version uses local paths from the zip archive
