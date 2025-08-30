@@ -340,10 +340,10 @@ function loadSkinFromArchive(skinIndex) {
   return fetch(skin.skin_file)
     .then(response => response.text())
     .then(css => {
-      return {
-        ...skin,
-        skin: css
-      };
+      return Object.assign({}, skin, { skin: css });
+
+    // ...skin,
+    // skin: css
     })
     .catch(error => {
       console.error('Failed to load skin CSS:', error);
