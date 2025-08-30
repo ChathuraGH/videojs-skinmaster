@@ -1,7 +1,8 @@
 {
   // "parser": "babel-eslint", // or "@typescript-eslint/parser" for TypeScript
   "parserOptions": {
-    "ecmaVersion": 2020, // or a higher version for newer features
+    // "ecmaVersion": 2020, // or a higher version for newer features
+    "ecmaVersion": 6, // or a higher version for newer features
     // "sourceType": "module",
     // "ecmaFeatures": {
       // "jsx": true // if using React JSX
