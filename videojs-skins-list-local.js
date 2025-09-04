@@ -341,7 +341,6 @@ function loadSkinFromArchive(skinIndex) {
     .then(response => response.text())
     .then(css => {
       return Object.assign({}, skin, { skin: css });
-
     // ...skin,
     // skin: css
     })
