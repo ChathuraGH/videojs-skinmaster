@@ -1,6 +1,6 @@
 {
   "name": "videojs-skinmaster",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "The ultimate skin management plugin for Video.js with 30+ professionally designed skins, live preview, and intuitive controls.",
   "main": "cjs/plugin.js",
   "module": "es/plugin.js",
